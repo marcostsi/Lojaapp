@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}PERFIL{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>DETALHES DO CLIENTE</h3>
+            <br>
+            <p><span class="font-weight-bold">Nome: </span>{{ cliente.nome_completo }}</p>
+            <p><span class="font-weight-bold">Usuário: </span>{{ cliente.user.username }}</p>
+            <p><span class="font-weight-bold">Email: </span>{{ cliente.user.email }}</p>
+            <p><span class="font-weight-bold">Endereço: </span>{{ cliente.endereco }}</p>
+            <p><span class="font-weight-bold">Cadastrado em: </span>{{ cliente.data_on }}</p>
+        </div>
+        <div class="col-md-8">
+            <h3>DETALHES DA COMPRAS ANTERIORES</h3>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Pedido ID</th>
+                        <th>Valor</th>
+                        <th>Data Pedido</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{forloop.counter}}</td> 
+                        <td><a href="{% url 'lojaapp:clientepedidodetalhe' pedido.pk %}">Pedido_Numero_{{pedido.id}}</td></a>
+                        <td>R$ {{pedido.total}}</td>
+                        <td>{{pedido.criado_em }}</td>
+                        <td>{{pedido.pedido_status}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-3">
+        <a href="{% url 'lojaapp:home' %}">HOME</a> |
+        <a href="{% url 'lojaapp:sobre' %}">SOBRE</a> |
+        <a href="{% url 'lojaapp:contato' %}">CONTATO</a> |
+        <a href="{% url 'lojaapp:Todosprodutos' %}">CATEGORIAS</a> |
+        <a href="{% url 'lojaapp:meucarro' %}">CARRINHO</a> |
+
+        {% if request.user.cliente %}
+        Seja bem-vindo {{request.user.username}}!
+
+        <a href="{% url 'lojaapp:clienteentrar' %}">ENTRAR</a> |
+        <a href="{% url 'lojaapp:clienteperfil' %}">MEU PERFIL</a> |
+        <a href="{% url 'lojaapp:clientesair' %}">SAIR</a>
+
+        {% else %}
+
+        <a href="{% url 'lojaapp:clienteregistrar' %}">CADASTRAR CLIENTES</a> |
+        <a href="{% url 'lojaapp:clienteentrar' %}">ENTRAR</a>
+        {% endif %}
+
+        <div class="float-right">
+            <form action="{% url 'lojaapp:pesquisar' %}" method="GET">
+                <input type="text" placeholder="Pesquisar Produtos" required>
+                <button class="btn btn-success pull-right"> Pesquisar</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+
+    {% block content %}
+
+    {% endblock content %}
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+{% extends "admin_paginas/adminbase.html" %}
+
+<title>{% block title%} ADMINSTRADOR HOME {% endblock %}</title>
+
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>PEDIDOS PENDENTES</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>ID Pedido</th>
+                        <th>Cliente</th>
+                        <th>Data Pedido</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in PedidosPendentes %}
+
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{% url 'lojaapp:adminpedidodetalhe' pedido.id %}">#Pedido_{{pedido.id}}</a></td>
+                        <td>{{pedido.ordenando_por}}</td>
+                        <td>{{pedido.criado_em}}</td>
+                        <td>R$ {{pedido.total}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        </div>
+
+    </div>
+ </div>
+
+{% endblock %}

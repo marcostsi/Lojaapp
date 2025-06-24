@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}MEU CARRINHO{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>ITEMS DO CARRINHO</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Produto</th>
+                        <th>Avaliacao</th>
+                        <th>Quantidade</th>
+                        <th>Subtotal</th>
+                        <th>Açao</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in carrinho.carrinhoproduto_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{cp.produto.titulo}}</td>
+                        <td>{{cp.avaliacao}}</td>
+                        <td>{{cp.quantidade}}</td>
+                        <td>{{cp.subtotal}}</td>
+                        <td>
+                            <a href="{% url 'lojaapp:manipularcarro' cp.id %}?acao=inc" class="btn btn-success"> + </a>
+                            <a href="{% url 'lojaapp:manipularcarro' cp.id %}?acao=dcr" class="btn btn-warning"> - </a>
+                            <a href="{% url 'lojaapp:manipularcarro' cp.id %}?acao=rmv" class="btn btn-danger"> x </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Carrinho Total:</th>
+                        <th>R$ {{carrinho.total|floatformat:2}}</th>
+                        {% if carrinho.carrinhoproduto_set.all %}
+                        <th><a href="{% url 'lojaapp:limparcarro' %}" class="btn-sm btn-warning">Limpar Carrinho</a></th>
+                        {% endif %}
+                    </tr>
+                    {% if carrinho.carrinhoproduto_set.all %}
+                    <tr>
+                        <th><a href="{% url 'lojaapp:checkout' %}" class="btn-sm btn-info">Processar Compra</a></th>
+                    </tr>
+                    {% endif %}  
+                </tbody>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

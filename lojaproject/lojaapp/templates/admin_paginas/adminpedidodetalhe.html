@@ -1,0 +1,70 @@
+{% extends 'admin_paginas/adminbase.html' %}
+{% load humanize %}
+{% block title %}DETALHES DO PEDIDOS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h3>DETALHES DO PEDIDO</h3>
+            <hr>
+            <p><strong>PRODUTO ID:</strong> Pedido_{{ pedido_obj.id }}</p>
+            <p><strong>STATUS DO PEDIDO:</strong> {{ pedido_obj.pedido_status }}</p>
+            <p><strong>DATA EFETUADO:</strong> {{ pedido_obj.criado_em }}</p>
+            <p><strong>INFORMAÇÃO DO CLIENTE:</strong> {{ pedido_obj.ordenando_por }}</p>
+            <p><strong>TELEFONE DO CLIENTE:</strong> {{ pedido_obj.telefone }}</p>
+            <p><strong>ENDEREÇO DO CLIENTE:</strong> {{ pedido_obj.endereco_envio }}</p>
+            <p><strong>EMAIL DO CLIENTE:</strong> {{ pedido_obj.email }}</p>
+
+            <hr>
+            <h4>ITENS DO PEDIDO</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Item</th>
+                        <th>Avaliação</th>
+                        <th>Quantidade</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in pedido_obj.carrinho.carrinhoproduto_set.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a target="_blank" href="{% url 'lojaapp:produtodetalhe' cp.produto.slug %}">
+                                {{ cp.produto.titulo }} 
+                            </a>
+                        </td>
+                        <td>{{ cp.avaliacao }}</td>
+                        <td>{{ cp.quantidade }}</td>
+                        <td>R$ {{ cp.subtotal|intcomma }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Valor Total:</th>
+                        <th>R$ {{ pedido_obj.total|intcomma }}</th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+            <h5>Atualizar Status do Pedido</h5>
+            <form action="{% url 'lojaapp:adminpedidomudar' pedido_obj.id %}" method="post" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group">
+                    <select name="status" class="form-control mr-2">
+                        {% for i, j in todosstatus %}
+                            <option value="{{ i }}" {% if i == pedido_obj.pedido_status %}selected{% endif %}>
+                                {{ j }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-success">ALTERAR STATUS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

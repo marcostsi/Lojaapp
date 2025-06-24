@@ -1,0 +1,38 @@
+{% extends 'admin_paginas/adminbase.html' %} 
+{% block title %}LISTA DE TODOS OS PEDIDOS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>LISTA DE TODOS OS PEDIDOS</h3>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>ID Pedido</th>
+                        <th>Cliente</th>
+                        <th>Data Pedido</th>
+                        <th>Valor</th>
+                        <th>Status Produtos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in todospedido %}
+
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{% url 'lojaapp:adminpedidodetalhe' pedido.id %}">#Pedido_{{pedido.id}}</a></td>
+                        <td>{{pedido.ordenando_por}}</td>
+                        <td>{{pedido.criado_em}}</td>
+                        <td>R$ {{pedido.total}}</td>
+                        <td>R$ {{pedido.pedido_status}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
