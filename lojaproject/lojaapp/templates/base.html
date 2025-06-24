@@ -31,7 +31,7 @@
 
         <div class="float-right">
             <form action="{% url 'lojaapp:pesquisar' %}" method="GET">
-                <input type="text" placeholder="Pesquisar Produtos" required>
+                <input type="text" name="keyword" placeholder="Pesquisar Produtos" required>
                 <button class="btn btn-success pull-right"> Pesquisar</button>
             </form>
         </div>

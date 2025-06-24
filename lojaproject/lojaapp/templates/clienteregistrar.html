@@ -16,7 +16,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 {{form.as_p}}
-                <button type="submit" class="btn-sm btn-success">Cadastrar Clientes</button>
+                <button type="submit" class="btn btn-primary">Cadastrar Clientes</button>
             </form>
             <p>Você já é cadastrado? <a href="{% url 'lojaapp:clienteentrar' %}"> Faça o login</a></p>
         </div>

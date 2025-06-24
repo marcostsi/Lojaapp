@@ -12,6 +12,7 @@ class ClienteRegistrarForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput())
     email = forms.CharField(widget=forms.EmailInput())
+    
     class Meta:
         model = Cliente
         fields = ['username', 'password', 'email', 'nome_completo', 'endereco']
