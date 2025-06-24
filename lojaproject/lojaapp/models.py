@@ -78,6 +78,11 @@ PEDIDO_STATUS = (
     ('Pedido Cancelado', 'Pedido Cancelado'),
 )
 
+METHOD = (
+    ("Dinehriro na Entrega", "Dinehriro na Entrega"),
+    ("Knalti", "Knalti"),
+)
+
 
 class Pedido_order(models.Model):
     carrinho = models.OneToOneField(Carrinho, on_delete=models.CASCADE)
@@ -91,6 +96,8 @@ class Pedido_order(models.Model):
     total = models.PositiveIntegerField()
     pedido_status = models.CharField(max_length=50, choices=PEDIDO_STATUS)
     criado_em = models.DateTimeField(auto_now_add=True)
+    pagamento_method = models.CharField(max_length=20, choices=METHOD, default="Dinehriro na Entrega")
+    pagamento_completo = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return "Pedido:" + str(self.id)

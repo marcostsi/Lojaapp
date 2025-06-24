@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center">SEJA BEM-VINDO A PÁGINA HOME</h1>
+    <h1 class="text-center">SEJA BEM-VINDO À PÁGINA HOME</h1>
     <hr>
     <div class="row mt-3">
         {% for p in produto_list %}
@@ -17,22 +17,45 @@
         </div>
         {% endfor %}
     </div>
-    <nav aria-label="...">
-  <ul class="pagination">
-    {% if produto_list.has_previous %}
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1">Previous</a>
-    </li>
-    {% endif %}
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active">
-      <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
+
+
+    <nav aria-label="Navegação de página">
+        <ul class="pagination justify-content-center mt-4">
+
+            {% if produto_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ produto_list.previous_page_number }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+
+ 
+            {% for i in produto_list.paginator.page_range %}
+            {% if i == produto_list.number %}
+            <li class="page-item active">
+                <span class="page-link">{{ i }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if produto_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ produto_list.next_page_number }}">Próximo</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Próximo</span>
+            </li>
+            {% endif %}
+
+        </ul>
+    </nav>
 </div>
 {% endblock %}

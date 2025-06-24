@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
+from django.urls.base import reverse
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView
 from django.urls import reverse_lazy
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from .forms import Checar_PedidoForm, ClienteRegistrarForm, ClienteEntrarForm
 from .models import *
 from django.core.paginator import Paginator
@@ -132,6 +135,7 @@ class LimparCarroView(LojaMixin, View):
             carrinho.save()
         return redirect("lojaapp:meucarro")
 
+# checkout view corrigida
 class CheckoutView(LojaMixin, CreateView):
     template_name = "processar.html"
     form_class = Checar_PedidoForm
@@ -152,16 +156,44 @@ class CheckoutView(LojaMixin, CreateView):
     def form_valid(self, form):
         carrinho_id = self.request.session.get('carro_id')
         carrinho_obj = Carrinho.objects.filter(id=carrinho_id).first()
-        if carrinho_obj:
-            form.instance.carrinho = carrinho_obj
-            form.instance.subtotal = carrinho_obj.total
-            form.instance.disconto = 0
-            form.instance.total = carrinho_obj.total
-            form.instance.pedido_status = "Pedido Recebido"
-            del self.request.session['carro_id']
-        else:
+        if not carrinho_obj:
             return redirect("lojaapp:home")
+
+        # Preenche dados do pedido
+        form.instance.carrinho = carrinho_obj
+        form.instance.subtotal = carrinho_obj.total
+        form.instance.disconto = 0
+        form.instance.total = carrinho_obj.total
+        form.instance.pedido_status = "Pedido Recebido"
+
+        # Salva o pedido
+        pedido = form.save()
+
+        # Limpa o carrinho da sessão
+        if 'carro_id' in self.request.session:
+            del self.request.session['carro_id']
+
+        # Redireciona para pagamento
+        pm = form.cleaned_data.get('pagamento_method')
+        if pm == "Khalti":
+            return redirect(reverse("lojaapp:pagamento") + "?order_id=" + str(pedido.id))
+        
         return super().form_valid(form)
+
+
+class PagamentoView(View):
+    def get(self, request, *args, **kwargs):
+        o_id = request.GET.get('order_id')
+        try:
+            pedido = get_object_or_404(Pedido_order, id=o_id)
+        except Pedido_order.DoesNotExist:
+            raise Http404("Pedido não encontrado.")
+        
+        context = {
+            "pedido": pedido,
+            "order_id": o_id,
+        }
+        return render(request, "pagamento.html", context)
 
 class MeuCarroView(LojaMixin, TemplateView):
     template_name = "meucarro.html"
@@ -186,8 +218,7 @@ class ClienteRegistrarView(CreateView):
         if User.objects.filter(username=username).exists():
             form.add_error('username', 'Este nome de usuário já está em uso.')
             return self.form_invalid(form)
-
-        # Cria usuário
+        
         user = User.objects.create_user(username=username, email=email, password=password)
         form.instance.user = user
 

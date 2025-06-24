@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAGAGEMENTO</title>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17"></script>
+</head>
+<body>
+    <h3>Valor Total da sua Compra é: R$. {{pedido.total}}</h3>
+    <button id="payment-button">Continuar com Pagamento</button>
+    <script>
+        var config = {
+            "publicKey": "test_public_key_dc74e0fd57cb46cd938332aee0a390234",
+            "productIdentity": "1234567890",
+            "productName": "Dragon",
+            "productUrl": "https://gamefthrones.wikia.com/wiki/Dragons",
+            "amount": 1000,
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+            ],
+            "eventHandler": {
+                onSuccess(payload) {
+                console.log(payload);
+                },
+                onError(error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log("widget is closing");
+                },
+            }
+        };
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            checkout.show({amount: 1000});
+        };
+    </script>
+</body>
+</html>

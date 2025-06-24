@@ -24,4 +24,5 @@ urlpatterns = [
     path("admin-todos-pedidos/", AdminPedidoListaView.as_view(), name="adminpedidolista"),
     path("admin-pedido-<int:pk>-mudar/", AdminPedidoMudarStatusView.as_view(), name="adminpedidomudar"),
     path("pesquisar/", PesquisarView.as_view(), name="pesquisar"),
+    path("pagamento/", PagamentoView.as_view(), name="pagamento"),
 ]
